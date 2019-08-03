@@ -58,7 +58,7 @@ end
 function Deded(Victim)
     if (Victim:IsPlayer())
     then
-        table.insert(deathflag, Victim:GetUniqueID()); LOG("Ree YOUR SELF!"); 
+        table.insert(deathflag, Victim:GetUUID()); LOG("Ree YOUR SELF!"); 
     else
 
     end
@@ -69,7 +69,7 @@ function Spawning(Player)
     local onDeath = false;
     -- see if they have died
     for _,v in pairs(deathflag) do
-        if v == Player:GetUniqueID() then
+        if v == Player:GetUUID() then
             onDeath = true;
             table.remove(deathflag, _)
           break
@@ -79,12 +79,12 @@ function Spawning(Player)
       -- if random spawn on first login is true
     if(TPSpawnOnFirstLogin)
     then
-        local cursor = DB:execute([[select * from players where id =]] .. Player:GetUniqueID() .. [[ ]]);
+        local cursor = DB:execute([[select * from players where id =]] .. Player:GetUUID() .. [[ ]]);
 
         if(cursor == 0)
         then
             SpawnTP(Player);
-            DB:execute([[insert into players (id) values (]] .. Player:GetUniqueID() .. [[)]])
+            DB:execute([[insert into players (id) values (]] .. Player:GetUUID() .. [[)]])
         end
     end
 
