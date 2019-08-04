@@ -1,5 +1,5 @@
 -- Easy config here:
-SpawnTPDebug = false:           --(implimented)     Debug for developing it
+SpawnTPDebug = false;           --(implimented)     Debug for developing it
 SpawnTPOnDeath = true;          --(implimented)     If you want to SpawnTP after death.
 SpawnTPOnLogin = false;         --(implimented)     If set true will always random spawn you no matter if you are logging in or died.
 SpawnTPOnFirstLogin = false;    --(not implimented) Will spawn you in a random spot on first login.
@@ -21,7 +21,7 @@ Zmin = -8192;
 DB = sqlite3.open("Plugins/spawnTP/ReturningPlayers.sqlite"); --Change string to store elsewhere
 
 
-
+-- the function used to Teleport player
 function SpawnTP(Player)
     local UUID = Player:GetUUID()
     local X = math.random(Xmin, Xmax);
@@ -32,6 +32,19 @@ function SpawnTP(Player)
 
     local msg = "spawned: ( name = " .. Player.GetName() .. " UUID = " .. UUID .. " @(x = " .. X .. ", y = " .. Y ..", z = " .. Z .. "))";
     debug(msg);
+end
+
+-- the command processer
+function CommandProcess(Player, CommandSplit, EntireCommand)
+    if (string.lower(CommandSplit[1]) == "spawntp") then
+    CSpawnTP(Player);
+    end
+end
+
+-- 
+function CSpawnTP(Player)
+    Debug("CSpawnTP called by: " .. Player.GetName());
+    spawnTP(Player);
 end
 
 
@@ -45,7 +58,13 @@ function Initialize(Plugin)
 
     -- For getting when a player spawns
     cPluginManager:AddHook(cPluginManager.HOOK_PLAYER_SPAWNED, Spawning)
+
+    -- For temp logging death
     cPluginManager:AddHook(cPluginManager.HOOK_KILLED, Deded);
+
+    -- for command
+    cPluginManager:AddHook(cPluginManager.HOOK_EXECUTE_COMMAND, CommandProcess);
+
     if(SpawnTPOnFirstLogin)
     then
         if (DB == nil) then
@@ -54,7 +73,8 @@ function Initialize(Plugin)
         end
 
     if not(
-        DB:execute([[CREATE TABLE players ('id' string)]])
+        DB:execute([[CREATE TABLE players ('id' string NOT NULL UNIQUE,
+        PRIMARY KEY("id"))]])
 	) then
 		LOGWARNING(PluginPrefix .. "Cannot create DB tables!")
 		return false
@@ -71,11 +91,11 @@ end
 
 
 --small debug that checks config
-function Debug(message){
+function Debug(message)
     if (SpawnTPDebug) then
     LOG(message);
     end
-}
+end
 
 -- Add player to died list, this is so we can track if its a login spawn or not.
 function Deded(Victim)
