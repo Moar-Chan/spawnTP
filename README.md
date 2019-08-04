@@ -1,4 +1,4 @@
-This is a cuberite plugin that adds a random spawn system that spawns players based on config in a random area
+This is a cuberite plugin that adds a random spawn system that spawns players based on config in a random area, it won't get breaking changes in the forseeable future but its under constant development and the mos basic of stuff has not been fully implimented yet.
 
 what works:
  - spawning in a random location after death
