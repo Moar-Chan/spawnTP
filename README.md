@@ -7,3 +7,9 @@ what works:
 what does not work:
  - spawning in a random location when logging in for the first time(toggleable)
  - spawning on a command (togleable)
+
+Why doe the things not work:
+  Random spawn on first login:
+    - sqlite getting the amount of rows of ids in a nummber is not really working so 
+  Random spawn on command:
+    - Simply not implimented at all
